@@ -46,30 +46,13 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
         // No pagination added, we are optimistic that there is a stable release within the first 100
         // releases.
     })
-    let done = false
     let tries = 0
     for (let release of releases.data) {
-        if (version !== "" && release.name === version) {
+        if ((version !== "" && release.name === version) || (!release.prerelease && release.name.startsWith(versionPrefix))) {
             console.log("Found release " + release.name + " matching criteria, attempting to download binary...")
             try {
                 await downloadRelease(octokit, org, repo, release)
-                done = true
-                break
-            } catch (e) {
-                tries++
-                if (tries > 3) {
-                    console.log("Binary download failed, tried " + tries + " times, giving up. (" + e + ")")
-                    throw e
-                }
-                console.log("Binary download failed, trying next release. (" + e + ")")
-            }
-        }
-        if (!release.prerelease && release.name.startsWith(versionPrefix)) {
-            console.log("Found release " + release.name + " matching criteria, attempting to download binary...")
-            try {
-                await downloadRelease(octokit, org, repo, release)
-                done = true
-                break
+                return
             } catch (e) {
                 tries++
                 if (tries > 3) {
@@ -80,9 +63,7 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
             }
         }
     }
-    if (!done) {
-        throw "Failed to find a release matching the criteria."
-    }
+    throw "Failed to find a release matching the criteria."
 }
 
 try {
