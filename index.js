@@ -25,7 +25,7 @@ async function downloadRelease(octokit, org, repo, release, token) {
             console.log("Removing tarball...")
             fs.unlinkSync("/tmp/gotestfmt.tar.gz")
             console.log("Linking gotestfmt...")
-            execSync("sudo ln -s /usr/local/lib/gotestfmt/gotestfmt /usr/local/bin/gotestfmt")
+            execSync("sudo ln -s /usr/local/lib/gotestfmt/gotestfmt /usr/bin/gotestfmt")
             console.log("Successfully set up gotestfmt.")
             return
         }
