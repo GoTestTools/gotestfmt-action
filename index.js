@@ -6,6 +6,9 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
         if (!version.startsWith(versionPrefix)) {
             throw "Specified version " + version + " does not start with required version prefix " + versionPrefix + "."
         }
+        console.log("Downloading gotestfmt version " + version + " from " + org + "/" + repo + "...")
+    } else {
+        console.log("Downloading latest stable gotestfmt version starting with " + versionPrefix + " from " + org + "/" + repo + "...")
     }
     const releases = await octokit.rest.repos.listReleases({
         owner: org,
@@ -13,12 +16,14 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
         // No pagination added, we are optimistic that there is a stable release within the first 100
         // releases.
     })
+    console.log(releases)
     for (let release of releases) {
-        console.log(release)
+
     }
 }
 
 try {
+    // versionPrefix is the prefix of the version gotestfmt-action supports.
     const versionPrefix = "v1."
     const token = core.getInput('token');
     const version = core.getInput('version');
