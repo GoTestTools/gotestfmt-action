@@ -63,24 +63,27 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
             }
         }
     }
+    console.log("Failed to find a release matching the criteria.")
     throw "Failed to find a release matching the criteria."
 }
 
-try {
-    // versionPrefix is the prefix of the version gotestfmt-action supports.
-    const versionPrefix = "v1."
-    const token = core.getInput('token');
-    const version = core.getInput('version');
-    const org = core.getInput("org")
-    const repo = core.getInput("repo")
-    const octokit = new Octokit({
-        auth: token,
-    })
-    downloadGofmt(octokit, version, versionPrefix, org, repo).then(function () {
-        console.log("Download successful.")
-    }).catch(reason => function() {
-        core.setFailed(reason);
-    })
-} catch (error) {
-    core.setFailed(error.message);
+async function main() {
+    try {
+        // versionPrefix is the prefix of the version gotestfmt-action supports.
+        const versionPrefix = "v1."
+        const token = core.getInput('token');
+        const version = core.getInput('version');
+        const org = core.getInput("org")
+        const repo = core.getInput("repo")
+        const octokit = new Octokit({
+            auth: token,
+        })
+        await downloadGofmt(octokit, version, versionPrefix, org, repo)
+        console.log("Setup complete.")
+    } catch (error) {
+        console.log("Setup failed.")
+        core.setFailed(error);
+    }
 }
+
+main()
