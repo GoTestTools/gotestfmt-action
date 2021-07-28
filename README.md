@@ -1,4 +1,4 @@
-# Beautiful test output for go tests
+# gotestfmt: go test output for humans
 
 This action uses [gotestfmt](https://github.com/haveyoudebuggedit/gotestfmt) to create a beautifully formatted test output in GitHub Actions.
 
