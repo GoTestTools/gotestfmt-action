@@ -1,5 +1,5 @@
 name: 'gotestfmt'
-description: 'Set up gotestfmt, an output formatter for go test.'
+description: 'Make your go test output beautiful.'
 branding:
   icon: 'cast'
   color: 'orange'
