@@ -14,9 +14,9 @@ async function downloadRelease(octokit, org, repo, release, token) {
         if (asset.name.endsWith("_linux_amd64.tar.gz")) {
             console.log("Found Linux binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                execSync("curl -o /tmp/gotestfmt.tar.gz -H \"Authorization: Bearer " + token + "\" " + asset.browser_download_url)
+                execSync("curl -L -o /tmp/gotestfmt.tar.gz -H \"Authorization: Bearer " + token + "\" " + asset.browser_download_url)
             } else {
-                execSync("curl -o /tmp/gotestfmt.tar.gz " + asset.browser_download_url)
+                execSync("curl -L -o /tmp/gotestfmt.tar.gz " + asset.browser_download_url)
             }
             console.log("Creating /usr/local/lib/gotestfmt directory...")
             execSync("sudo mkdir -p /usr/local/lib/gotestfmt")
