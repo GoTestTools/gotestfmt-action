@@ -10,10 +10,11 @@ async function downloadRelease(octokit, org, repo, release) {
         release_id: release.id,
     })
     for (let asset of releaseAssets.data) {
-        console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + "...")
+        console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
         if (asset.name.endsWith("_linux_amd64.tar.gz")) {
-            console.log("Found Linux binary named " + asset.name + " at " + asset.browser_download_url + ", attempting download...")
+            console.log("Found Linux binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             const response = await octokit.request("GET " + asset.browser_download_url)
+            console.log(response)
             console.log("Writing gotestfmt to ./tmp/gotestfmt.tar.gz...")
             fs.writeFileSync("/tmp/gotestfmt.tar.gz", response.data)
             console.log("Creating /usr/local/lib/gotestfmt directory...")
