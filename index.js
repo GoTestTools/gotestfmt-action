@@ -17,13 +17,13 @@ async function downloadRelease(octokit, org, repo, release) {
             console.log("Writing gotestfmt to ./tmp/gotestfmt.tar.gz...")
             fs.writeFileSync("/tmp/gotestfmt.tar.gz", response.data)
             console.log("Creating /usr/local/lib/gotestfmt directory...")
-            fs.mkdirSync("/usr/local/lib/gotestfmt")
+            execSync("sudo mkdir -p /usr/local/lib/gotestfmt")
             console.log("Unpacking tar file...")
-            execSync("cd /usr/local/lib/gotestfmt && tar -xvzf /tmp/gotestfmt.tar.gz")
+            execSync("cd /usr/local/lib/gotestfmt && sudo tar -xvzf /tmp/gotestfmt.tar.gz")
             console.log("Removing tarball...")
             fs.unlinkSync("/tmp/gotestfmt.tar.gz")
             console.log("Linking gotestfmt...")
-            fs.symlinkSync("/usr/local/bin/gotestfmt", "/usr/local/lib/gotestfmt/gotestfmt")
+            execSync("sudo ln -s /usr/local/lib/gotestfmt/gotestfmt /usr/local/bin/gotestfmt")
             console.log("Successfully set up gotestfmt.")
             return
         }
