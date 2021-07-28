@@ -14,5 +14,4 @@ jobs:
         with:
           go-version: 1.16
       - name: Run gotestfmt
-        working-directory: testdata
-        run: go test -v ./... | gotestfmt
+        run: cd testdata && go test -v ./... | gotestfmt
