@@ -1,0 +1,14 @@
+name: Other issues
+description: Ask a question, tell us something, or report something else.
+assignees:
+  - janosdebugs
+body:
+  - type: textarea
+    id: message
+    attributes:
+      label: What would you like to tell us?
+      description: Let us know something...
+      placeholder: Hello world!
+      value: ""
+    validations:
+      required: true

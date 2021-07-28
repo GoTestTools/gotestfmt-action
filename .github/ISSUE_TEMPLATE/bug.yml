@@ -1,0 +1,45 @@
+name: Bug Report
+description: File a bug report
+title: "Bug: "
+labels: [bug]
+assignees:
+  - janosdebugs
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    id: gotestfmt
+    attributes:
+      label: Is this a bug specifically in the GitHub action?
+      description: Please only file bug reports in this repository for the GitHub action implementation of gotestfmt. Bugs in gotestfmt itself should go into its own repository.
+      options:
+        - label: This is not a gotestfmt bug, this is a gotestfmt-action bug
+          required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Please tell us what happened.
+      placeholder: Tell us what you see!
+      value: ""
+    validations:
+      required: true
+  - type: textarea
+    id: expectations
+    attributes:
+      label: What did you expect happened?
+      description: Please tell us what you expected to happen.
+      placeholder: Tell us what you would like to happen.
+      value: ""
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How did you make this happen?
+      description: Please tell us in as much detail as possible what your setup is and how to reproduce this issue.
+      value: ""
+    validations:
+      required: true
