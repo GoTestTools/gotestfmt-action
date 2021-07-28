@@ -1,5 +1,8 @@
 name: 'gotestfmt'
 description: 'Set up gotestfmt, an output formatter for go test.'
+branding:
+  icon: 'cast'
+  color: 'orange'
 inputs:
   token:
     description: 'GitHub token to avoid rate limiting.'
