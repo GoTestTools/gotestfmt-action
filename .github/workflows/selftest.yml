@@ -1,8 +1,9 @@
 on: [push]
+name: Self-test
 jobs:
   self-test:
-    runs-on: ubuntu-latest
     name: Self-test
+    runs-on: ubuntu-latest
     steps:
       - name: Install gotestfmt
         uses: haveyoudebuggedit/gotestfmt-action@main
