@@ -64,7 +64,7 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
                 console.log("Binary download failed, trying next release. (" + e + ")")
             }
         }
-        if (!release.prerelease && release.name.startsWith(versionPrefix) {
+        if (!release.prerelease && release.name.startsWith(versionPrefix)) {
             console.log("Found release " + release.name + " matching criteria, attempting to download binary...")
             try {
                 await downloadRelease(octokit, org, repo, release)
