@@ -1,0 +1,14 @@
+on: [push]
+jobs:
+  self-test:
+    runs-on: ubuntu-latest
+    name: Self-test
+    steps:
+      - name: Install gotestfmt
+        uses: haveyoudebuggedit/gotestfmt-action@main
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: Run gotestfmt
+        run: go test -v ./... | gotestfmt

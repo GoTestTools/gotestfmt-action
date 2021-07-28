@@ -1,0 +1,22 @@
+name: 'gotestfmt'
+description: 'Set up gotestfmt, an output formatter for go test.'
+inputs:
+  token:
+    description: 'GitHub token to avoid rate limiting.'
+    required: false
+    default: ''
+  version:
+    description: 'Which version of gofmt to download. Defaults to the latest.'
+    required: false
+    default: ''
+  org:
+    description: 'Organization to fetch gotestfmt from.'
+    required: false
+    default: 'haveyoudebuggedit'
+  repo:
+    description: 'Repository to fetch gotestfmt from.'
+    required: false
+    default: 'gotestfmt'
+runs:
+  using: 'node12'
+  main: 'index.js'
