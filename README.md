@@ -2,6 +2,8 @@
 
 This action uses [gotestfmt](https://github.com/haveyoudebuggedit/gotestfmt) to create a beautifully formatted test output in GitHub Actions.
 
+![An animation showcasing that gotestfmt transforms a text log into an interactive log with folding sections.](https://debugged.it/projects/gotestfmt/gotestfmt.svg)
+
 ## Usage
 
 You can use gotestfmt with the following configuration:
