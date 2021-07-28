@@ -17,4 +17,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Run gotestfmt
         working-directory: testdata
-        run: go test -v ./... | gotestfmt
+        run: go test -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
+      - name: Upload test log
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: test-log
+          path: /tmp/gotest.log
+          if-no-files-found: error
