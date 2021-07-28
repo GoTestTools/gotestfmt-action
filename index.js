@@ -1,5 +1,35 @@
 const core = require('@actions/core');
 const { Octokit } = require("@octokit/rest");
+const fs = require("fs")
+const { execSync } = require("child_process")
+
+async function downloadRelease(octokit, org, repo, release) {
+    const releaseAssets = await octokit.rest.repos.listReleaseAssets({
+        owner: org,
+        repo: repo,
+        release_id: release.id,
+    })
+    for (let asset of releaseAssets.data) {
+        console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + "...")
+        if (asset.name.endsWith("_linux_amd64.tar.gz")) {
+            console.log("Found Linux binary named " + asset.name + " at " + asset.browser_download_url + ", attempting download...")
+            const response = await octokit.request("GET " + asset.browser_download_url)
+            console.log("Writing gotestfmt to ./tmp/gotestfmt.tar.gz...")
+            fs.writeFileSync("/tmp/gotestfmt.tar.gz", response.data)
+            console.log("Creating /usr/local/lib/gotestfmt directory...")
+            fs.mkdirSync("/usr/local/lib/gotestfmt")
+            console.log("Unpacking tar file...")
+            execSync("cd /usr/local/lib/gotestfmt && tar -xvzf /tmp/gotestfmt.tar.gz")
+            console.log("Removing tarball...")
+            fs.unlinkSync("/tmp/gotestfmt.tar.gz")
+            console.log("Linking gotestfmt...")
+            fs.symlinkSync("/usr/local/bin/gotestfmt", "/usr/local/lib/gotestfmt/gotestfmt")
+            console.log("Successfully set up gotestfmt.")
+            return
+        }
+    }
+    throw "No release asset matched criteria."
+}
 
 async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
     if (version !== "") {
@@ -16,9 +46,42 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo) {
         // No pagination added, we are optimistic that there is a stable release within the first 100
         // releases.
     })
-    console.log(releases)
-    for (let release of releases) {
-
+    let done = false
+    let tries = 0
+    for (let release of releases.data) {
+        if (version !== "" && release.name === version) {
+            console.log("Found release " + release.name + " matching criteria, attempting to download binary...")
+            try {
+                await downloadRelease(octokit, org, repo, release)
+                done = true
+                break
+            } catch (e) {
+                tries++
+                if (tries > 3) {
+                    console.log("Binary download failed, tried " + tries + " times, giving up. (" + e + ")")
+                    throw e
+                }
+                console.log("Binary download failed, trying next release. (" + e + ")")
+            }
+        }
+        if (!release.prerelease && release.name.startsWith(versionPrefix) {
+            console.log("Found release " + release.name + " matching criteria, attempting to download binary...")
+            try {
+                await downloadRelease(octokit, org, repo, release)
+                done = true
+                break
+            } catch (e) {
+                tries++
+                if (tries > 3) {
+                    console.log("Binary download failed, tried " + tries + " times, giving up. (" + e + ")")
+                    throw e
+                }
+                console.log("Binary download failed, trying next release. (" + e + ")")
+            }
+        }
+    }
+    if (!done) {
+        throw "Failed to find a release matching the criteria."
     }
 }
 
