@@ -15,7 +15,7 @@ async function downloadRelease(octokit, org, repo, release) {
             console.log("Found Linux binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             const response = await octokit.request("GET " + asset.browser_download_url)
             console.log("Writing gotestfmt to ./tmp/gotestfmt.tar.gz...")
-            fs.writeFileSync("/tmp/gotestfmt.tar.gz", response.data, {encoding: null})
+            fs.writeFileSync("/tmp/gotestfmt.tar.gz", response.data, {encoding: 'binary'})
             console.log("Creating /usr/local/lib/gotestfmt directory...")
             execSync("sudo mkdir -p /usr/local/lib/gotestfmt")
             console.log("Unpacking tar file...")
