@@ -4,6 +4,8 @@ This action uses [gotestfmt](https://github.com/haveyoudebuggedit/gotestfmt) to 
 
 ![An animation showcasing that gotestfmt transforms a text log into an interactive log with folding sections.](https://debugged.it/projects/gotestfmt/gotestfmt.svg)
 
+**⚠️ With version 2.0 gotestfmt switched to supporting only JSON output. Please add the `-json` flag to your `go test` command line!**
+
 ## Usage
 
 You can use gotestfmt with the following configuration:
