@@ -40,7 +40,7 @@ jobs:
       - name: Run tests
         run: |
           set -euo pipefail
-          go test -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
+          go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
 
       # Upload the original go test log as an artifact for later review.
       - name: Upload test log
