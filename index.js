@@ -72,7 +72,7 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo, token) 
 async function main() {
     try {
         // versionPrefix is the prefix of the version gotestfmt-action supports.
-        const versionPrefix = "v1."
+        const versionPrefix = "v2."
         const token = core.getInput('token');
         const version = core.getInput('version');
         const org = core.getInput("org")

@@ -26,12 +26,12 @@ jobs:
 
       # Install gotestfmt on the VM running the action.
       - name: Set up gotestfmt
-        uses: haveyoudebuggedit/gotestfmt-action@v1
+        uses: haveyoudebuggedit/gotestfmt-action@v2
         with:
           # Optional: pass GITHUB_TOKEN to avoid rate limiting.
           token: ${{ secrets.GITHUB_TOKEN }}
           # Optional: pass the gotestfmt version you want to run. 
-          version: v1.0.0
+          version: v2.0.0
           # Optional: pass an organization name and repo to use a fork
           org: haveyoudebuggedit
           repo: gotestfmt
