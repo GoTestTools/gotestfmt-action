@@ -70,7 +70,6 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo, token) 
 }
 
 async function main() {
-    console.log("::warning title=Please switch to GoTestTools/gotestfmt-action::You are using the deprecated haveyoudebuggedit/gotestfmt-action. Please switch to GoTestTools/gotestfmt-action.")
     try {
         // versionPrefix is the prefix of the version gotestfmt-action supports.
         const versionPrefix = "v2."
