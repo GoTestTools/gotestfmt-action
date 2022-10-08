@@ -2,7 +2,7 @@
 
 This action uses [gotestfmt](https://github.com/haveyoudebuggedit/gotestfmt) to create a beautifully formatted test output in GitHub Actions.
 
-![An animation showcasing that gotestfmt transforms a text log into an interactive log with folding sections.](https://debugged.it/projects/gotestfmt/gotestfmt.svg)
+![An animation showcasing that gotestfmt transforms a text log into an interactive log with folding sections.](https://raw.githubusercontent.com/GoTestTools/.github/main/gotestfmt.svg)
 
 **⚠️ With version 2.0 gotestfmt switched to supporting only JSON output. Please add the `-json` flag to your `go test` command line!**
 
