@@ -15,7 +15,7 @@ inputs:
   org:
     description: 'Organization to fetch gotestfmt from.'
     required: false
-    default: 'haveyoudebuggedit'
+    default: 'GoTestTools'
   repo:
     description: 'Repository to fetch gotestfmt from.'
     required: false
