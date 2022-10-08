@@ -28,14 +28,14 @@ jobs:
 
       # Install gotestfmt on the VM running the action.
       - name: Set up gotestfmt
-        uses: haveyoudebuggedit/gotestfmt-action@v2
+        uses: GoTestTools/gotestfmt-action@v2
         with:
           # Optional: pass GITHUB_TOKEN to avoid rate limiting.
           token: ${{ secrets.GITHUB_TOKEN }}
           # Optional: pass the gotestfmt version you want to run. 
           version: v2.0.0
           # Optional: pass an organization name and repo to use a fork
-          org: haveyoudebuggedit
+          org: GoTestTools
           repo: gotestfmt
 
       # Run tests with nice formatting. Save the original log in /tmp/gotest.log
@@ -54,4 +54,4 @@ jobs:
           if-no-files-found: error
 ```
 
-For more information about gotestfmt please see the [gotestfmt](https://github.com/haveyoudebuggedit/gotestfmt) repository.
+For more information about gotestfmt please see the [gotestfmt](https://github.com/GoTestTools/gotestfmt) repository.
