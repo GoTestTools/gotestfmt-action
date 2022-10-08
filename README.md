@@ -1,6 +1,6 @@
 # gotestfmt: go test output for humans
 
-This action uses [gotestfmt](https://github.com/haveyoudebuggedit/gotestfmt) to create a beautifully formatted test output in GitHub Actions.
+This action uses [gotestfmt](https://github.com/GoTestTools/gotestfmt) to create a beautifully formatted test output in GitHub Actions.
 
 ![An animation showcasing that gotestfmt transforms a text log into an interactive log with folding sections.](https://raw.githubusercontent.com/GoTestTools/.github/main/gotestfmt.svg)
 
