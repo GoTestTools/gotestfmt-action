@@ -1,10 +1,10 @@
 # gotestfmt: go test output for humans
 
+> ⚠️ **Action required:** gotestfmt has moved to the `GoTestTools` organization and you need to update your references. Please see the [announcement](https://github.com/GoTestTools/gotestfmt/discussions/46). The old repository will be deleted on January 1, 2023.
+
 This action uses [gotestfmt](https://github.com/GoTestTools/gotestfmt) to create a beautifully formatted test output in GitHub Actions.
 
 ![An animation showcasing that gotestfmt transforms a text log into an interactive log with folding sections.](https://raw.githubusercontent.com/GoTestTools/.github/main/gotestfmt.svg)
-
-**⚠️ With version 2.0 gotestfmt switched to supporting only JSON output. Please add the `-json` flag to your `go test` command line!**
 
 ## Usage
 
