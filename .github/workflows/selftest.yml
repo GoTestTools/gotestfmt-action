@@ -3,8 +3,8 @@ on:
   pull_request:
 name: Self-test
 jobs:
-  self-test:
-    name: Self-test
+  self-test-ubuntu:
+    name: on Ubuntu
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go
@@ -19,9 +19,31 @@ jobs:
         working-directory: testdata
         run: go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
       - name: Upload test log
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: test-log
+          name: test-log-ubuntu
           path: /tmp/gotest.log
+          if-no-files-found: error
+  self-test-macos:
+    name: on MacOS
+    runs-on: macos-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install gotestfmt
+        uses: ./
+      - name: Run gotestfmt
+        working-directory: testdata
+        run: go test -json -v ./... 2>&1 | tee ./gotest.log | gotestfmt
+      - name: Upload test log
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-log-macos
+          path: ./testdata/gotest.log
           if-no-files-found: error
