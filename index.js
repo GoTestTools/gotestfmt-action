@@ -3,15 +3,16 @@ const { Octokit } = require("@octokit/rest");
 const fs = require("fs")
 const { execSync } = require("child_process")
 
-async function downloadRelease(octokit, org, repo, release, token) {
+async function downloadRelease(octokit, os, org, repo, release, token) {
     const releaseAssets = await octokit.rest.repos.listReleaseAssets({
         owner: org,
         repo: repo,
         release_id: release.id,
     })
+    tarPostfix = `_${os}_amd64.tar.gz`
     for (let asset of releaseAssets.data) {
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
-        if (asset.name.endsWith("_linux_amd64.tar.gz")) {
+        if (asset.name.endsWith(tarPostfix)) {
             console.log("Found Linux binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
                 execSync("curl -L -o /tmp/gotestfmt.tar.gz -H \"Authorization: Bearer " + token + "\" " + asset.browser_download_url)
@@ -32,10 +33,10 @@ async function downloadRelease(octokit, org, repo, release, token) {
             return
         }
     }
-    throw "No release asset matched criteria."
+    throw `No release asset matched postfix '${tarPostfix}'.`
 }
 
-async function downloadGofmt(octokit, version, versionPrefix, org, repo, token) {
+async function downloadGofmt(octokit, version, versionPrefix, os, org, repo, token) {
     if (version !== "") {
         if (!version.startsWith(versionPrefix)) {
             throw "Specified version " + version + " does not start with required version prefix " + versionPrefix + "."
@@ -55,7 +56,7 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo, token) 
         if ((version !== "" && release.name === version) || (!release.prerelease && release.name.startsWith(versionPrefix))) {
             console.log("Found release " + release.name + " matching criteria, attempting to download binary...")
             try {
-                await downloadRelease(octokit, org, repo, release, token)
+                await downloadRelease(octokit, os, org, repo, release, token)
                 return
             } catch (e) {
                 tries++
@@ -71,6 +72,12 @@ async function downloadGofmt(octokit, version, versionPrefix, org, repo, token) 
     throw "Failed to find a release matching the criteria."
 }
 
+async function determineOS() {
+    const os = execSync("uname").toString().trim().toLowerCase()
+    console.log(`Running on OS '${os}'`)
+    return os
+}
+
 async function main() {
     try {
         // versionPrefix is the prefix of the version gotestfmt-action supports.
@@ -82,7 +89,8 @@ async function main() {
         const octokit = new Octokit({
             auth: token,
         })
-        await downloadGofmt(octokit, version, versionPrefix, org, repo, token)
+        const os = await determineOS()
+        await downloadGofmt(octokit, version, versionPrefix, os, org, repo, token)
         console.log("Setup complete.")
     } catch (error) {
         console.log("Setup failed.")
