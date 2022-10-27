@@ -1,52 +1,39 @@
 on:
   pull_request:
+
 name: Self-test
 jobs:
-  self-test-ubuntu:
-    name: on Ubuntu
-    runs-on: ubuntu-latest
+
+  self-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu', 'macos', 'windows']
+
+    runs-on: ${{ matrix.os }}-latest
     steps:
+
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.16
+
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Install gotestfmt
         uses: ./
         with:
           token: ${{ secrets.GH_TOKEN }}
+
       - name: Run gotestfmt
         working-directory: testdata
-        run: go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
+        run: go test -json -v ./... 2>&1 | tee /tmp/gotest.${{ matrix.os }}.log | gotestfmt
+
       - name: Upload test log
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: test-log-ubuntu
-          path: /tmp/gotest.log
-          if-no-files-found: error
-  self-test-macos:
-    name: on MacOS
-    runs-on: macos-latest
-    steps:
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install gotestfmt
-        uses: ./
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-      - name: Run gotestfmt
-        working-directory: testdata
-        run: go test -json -v ./... 2>&1 | tee ./gotest.log | gotestfmt
-      - name: Upload test log
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-log-macos
-          path: ./testdata/gotest.log
+          name: test-log-${{ matrix.os }}
+          path: /tmp/gotest.${{ matrix.os }}.log
           if-no-files-found: error
