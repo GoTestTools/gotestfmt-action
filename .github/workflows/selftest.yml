@@ -30,18 +30,18 @@ jobs:
         if: matrix.os != 'windows'
         working-directory: testdata
         run: |
-          go test -json -v ./... 2>&1 | tee /tmp/gotest.${{ matrix.os }}.log | gotestfmt
+          go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Run gotestfmt (Windows)
         if: matrix.os == 'windows'
         working-directory: testdata
         run: |
-          go test -json -v ./... 2>&1 | Tee-Object /tmp/gotest.${{ matrix.os }}.log | gotestfmt
+          go test -json -v ./... 2>&1 | Tee-Object gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
         uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-log-${{ matrix.os }}
-          path: /tmp/gotest.${{ matrix.os }}.log
+          path: gotest.${{ matrix.os }}.log
           if-no-files-found: error
