@@ -10,6 +10,7 @@ jobs:
       matrix:
         os: ['ubuntu', 'macos', 'windows']
 
+    name: on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     steps:
 
@@ -24,16 +25,24 @@ jobs:
       - name: Install gotestfmt
         uses: ./
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Run gotestfmt
+        if: matrix.os != 'windows'
         working-directory: testdata
-        run: go test -json -v ./... 2>&1 | tee /tmp/gotest.${{ matrix.os }}.log | gotestfmt
+        run: |
+          go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
+
+      - name: Run gotestfmt (Windows)
+        if: matrix.os == 'windows'
+        working-directory: testdata
+        run: |
+          go test -json -v ./... 2>&1 | Tee-Object gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
         uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-log-${{ matrix.os }}
-          path: /tmp/gotest.${{ matrix.os }}.log
+          path: testdata/gotest.${{ matrix.os }}.log
           if-no-files-found: error
