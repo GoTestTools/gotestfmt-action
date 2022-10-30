@@ -10,6 +10,7 @@ jobs:
       matrix:
         os: ['ubuntu', 'macos', 'windows']
 
+    name: on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     steps:
 
