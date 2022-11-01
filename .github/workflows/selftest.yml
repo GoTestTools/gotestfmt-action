@@ -28,16 +28,10 @@ jobs:
           token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Run gotestfmt
-        if: matrix.os != 'windows'
         working-directory: testdata
+        shell: bash
         run: |
           go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
-
-      - name: Run gotestfmt (Windows)
-        if: matrix.os == 'windows'
-        working-directory: testdata
-        run: |
-          go test -json -v ./... 2>&1 | Tee-Object gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
         uses: actions/upload-artifact@v3
