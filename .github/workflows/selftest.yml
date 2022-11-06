@@ -32,7 +32,7 @@ jobs:
         working-directory: testdata
         shell: bash
         run: |
-          ls "/c/Users/runneradmin/bin"
+          ls -lr "/c/Users/runneradmin"
           go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
