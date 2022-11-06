@@ -74,6 +74,12 @@ async function downloadGofmt(octokit, version, versionPrefix, os, org, repo, tok
 
 async function determineOS() {
     const os = execSync("uname").toString().trim().toLowerCase()
+
+    if (os.indexOf("msys_nt") === 0)
+    {
+        os = "windows";
+    }
+
     console.log(`Running on OS '${os}'`)
     return os
 }
