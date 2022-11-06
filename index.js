@@ -10,7 +10,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
         release_id: release.id,
     })
 
-    postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
+    const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
 
     for (let asset of releaseAssets.data) {
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
