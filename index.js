@@ -92,16 +92,6 @@ async function determineOS() {
     return os
 }
 
-async function determineGOOS() {
-    const goos = process.env.GOOS;
-
-    if (goos) {
-        console.log(`Running on GOOS '${goos}'`)
-    }
-
-    return goos;
-}
-
 async function main() {
     try {
         // versionPrefix is the prefix of the version gotestfmt-action supports.
@@ -113,7 +103,7 @@ async function main() {
         const octokit = new Octokit({
             auth: token,
         })
-        const os = (await determineGOOS() || await determineOS())
+        const os = await determineOS()
         await downloadGofmt(octokit, version, versionPrefix, os, org, repo, token)
         console.log("Setup complete.")
     } catch (error) {
