@@ -21,13 +21,6 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
         execSync(`"${binpath}" >> $env:GITHUB_PATH`);
     }
 
-    console.debug("postfix: " + postfix);
-    console.debug("pathsep: " + pathsep);
-    console.debug("tempdir: " + tempdir);
-    console.debug("binpath: " + binpath);
-    console.debug("extract: " + extract);
-    console.debug("archive: " + archive);
-
     for (let asset of releaseAssets.data) {
 
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
@@ -35,18 +28,15 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                console.debug(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
                 execSync(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
-                console.debug(`curl -L -o ${archive} ${asset.browser_download_url}`)
                 execSync(`curl -L -o ${archive} ${asset.browser_download_url}`)
             }
 
-            console.debug("Unpacking archive file...")
-            console.debug(`cd ${binpath} && ${extract} ${archive}`)
+            console.log("Unpacking archive file...")
             execSync(`cd ${binpath} && ${extract} ${archive}`)
 
-            console.debug("Removing asset archive...")
+            console.log("Removing asset archive...")
             fs.unlinkSync(archive)
 
             console.log("Successfully set up gotestfmt.")
