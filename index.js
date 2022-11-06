@@ -13,9 +13,14 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     // Determine environment specific details, paths etc...
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP + "\\" : "/tmp/";
-    const binpath = os === "windows" ? process.env.USERPROFILE + "\\bin" : "/usr/local/bin";
+    const binpath = os === "windows" ? "C:\\Program Files\\GoTestTools\\bin\\" : "/usr/local/bin/";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}gotestfmt${postfix}`;
+
+    if (os === "windows") {
+        fs.mkdirpSync(binpath)
+        execSync(`echo "${binpath}" >> ${process.env.GITHUB_PATH}`)
+    }
 
     // Search through the latest release assets for an install canidate
     for (let asset of releaseAssets.data) {
