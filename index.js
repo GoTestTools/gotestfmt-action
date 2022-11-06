@@ -13,7 +13,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     // Determine environment specific details, paths etc...
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP + "\\" : "/tmp/";
-    const binpath = os === "windows" ? "C:\\Windows\\System32" : "/usr/local/bin";
+    const binpath = os === "windows" ? process.env.USERPROFILE + "\\bin" : "/usr/local/bin";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}gotestfmt${postfix}`;
 
@@ -31,6 +31,11 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
                 // Fallback to unauthenticated requests (might get rate limited)
                 execSync(`curl -L -o ${archive} ${asset.browser_download_url}`)
             }
+
+            // Ensure the that the install target exists
+            console.log("Preparing install target...")
+            fs.mkdirSync(binpath, { recursive: true })
+            core.addPath(binpath);
 
             // Extract the archive into the install target
             console.log("Unpacking archive file...")
