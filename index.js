@@ -17,12 +17,6 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}gotestfmt${postfix}`;
 
-    if (os === "windows") {
-        // Ensure the that the install target exists
-        fs.mkdirSync(binpath, { recursive: true })
-        core.addPath(binpath);
-    }
-
     // Search through the latest release assets for an install canidate
     for (let asset of releaseAssets.data) {
         // Check if the asset name matches the determined postfix
