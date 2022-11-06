@@ -16,6 +16,13 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const binpath = os === "windows" ? process.env.USERPROFILE + "\\bin" : "/usr/local/bin";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
+    
+    console.log("postfix: " + postfix);
+    console.log("pathsep: " + pathsep);
+    console.log("tempdir: " + tempdir);
+    console.log("binpath: " + binpath);
+    console.log("extract: " + extract);
+    console.log("archive: " + archive);
 
     for (let asset of releaseAssets.data) {
 
