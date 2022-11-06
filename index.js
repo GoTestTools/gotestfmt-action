@@ -17,12 +17,12 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
     
-    console.log("postfix: " + postfix);
-    console.log("pathsep: " + pathsep);
-    console.log("tempdir: " + tempdir);
-    console.log("binpath: " + binpath);
-    console.log("extract: " + extract);
-    console.log("archive: " + archive);
+    console.debug("postfix: " + postfix);
+    console.debug("pathsep: " + pathsep);
+    console.debug("tempdir: " + tempdir);
+    console.debug("binpath: " + binpath);
+    console.debug("extract: " + extract);
+    console.debug("archive: " + archive);
 
     for (let asset of releaseAssets.data) {
 
@@ -31,18 +31,18 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                console.log(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
+                console.debug(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
                 execSync(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
-                console.log(`curl -L -o ${archive} ${asset.browser_download_url}`)
+                console.debug(`curl -L -o ${archive} ${asset.browser_download_url}`)
                 execSync(`curl -L -o ${archive} ${asset.browser_download_url}`)
             }
 
-            console.log("Unpacking archive file...")
-            console.log(`cd ${binpath} && ${extract} ${archive}`)
+            console.debug("Unpacking archive file...")
+            console.debug(`cd ${binpath} && ${extract} ${archive}`)
             execSync(`cd ${binpath} && ${extract} ${archive}`)
 
-            console.log("Removing asset archive...")
+            console.debug("Removing asset archive...")
             fs.unlinkSync(archive)
 
             console.log("Successfully set up gotestfmt.")
