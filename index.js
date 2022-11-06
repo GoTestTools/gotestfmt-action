@@ -11,6 +11,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     })
 
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
+    const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
 
     for (let asset of releaseAssets.data) {
 
@@ -19,9 +20,9 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                execSync(`curl -L -o /tmp/gotestfmt${postfix} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
+                execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
-                execSync(`curl -L -o /tmp/gotestfmt${postfix} {asset.browser_download_url}`)
+                execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} {asset.browser_download_url}`)
             }
 
             console.log("Creating /usr/local/lib/gotestfmt directory...")
