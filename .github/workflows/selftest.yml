@@ -32,7 +32,8 @@ jobs:
         if: matrix.os == 'windows'
         shell: pwsh
         run: |
-          go test -json -v ./... 2>&1 | gotestfmt
+          echo "%PATH%"
+          go test -json -v ./... 2>&1 | gotestfmt.exe
 
       - name: Run gotestfmt
         working-directory: testdata
