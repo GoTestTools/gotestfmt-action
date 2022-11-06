@@ -13,7 +13,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const pathsep = os === "windows" ? "\\" : "/";
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
-    const libpath = os === "windows" ? process.env.USERPROFILE + "\bin" : "/usr/local/bin";
+    const libpath = os === "windows" ? process.env.USERPROFILE + "\\bin" : "/usr/local/bin";
     const extract = os === "windows" ? "tar -xvf " : "tar -xvzf";
     const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
 
