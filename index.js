@@ -39,7 +39,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             // Ensure the that the install target exists
             console.log("Preparing install target...")
-            fs.mkdirSync(binpath)
+            fs.mkdirSync(binpath, { recursive: true })
 
             // Extract the archive into the install target
             console.log("Unpacking archive file...")
