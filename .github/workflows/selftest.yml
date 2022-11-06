@@ -32,9 +32,7 @@ jobs:
         working-directory: testdata
         shell: bash
         run: |
-          echo "$PATH" | tr ':' '\n'
-          echo "Searching $USERPROFILE for binary"
-          ls "$USERPROFILE/bin"
+          ls "/c/Users/runneradmin/bin"
           go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
