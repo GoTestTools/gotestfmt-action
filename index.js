@@ -10,39 +10,48 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
         release_id: release.id,
     })
 
+    // Determine environment specific details, paths etc...
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
     const binpath = os === "windows" ? "C:\\Program Files\\GoTestTools\\" : "/usr/local/bin/";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}gotestfmt${postfix}`;
 
+    // Make sure that the install directory is on the PATH
     if (os === "windows") {
         execSync(`"${binpath}" >> $env:GITHUB_PATH`);
     }
 
+    // Search through the latest release assets for an install canidate
     for (let asset of releaseAssets.data) {
-
+        // Check if the asset name matches the determined postfix
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
         if (asset.name.endsWith(postfix)) {
-
+            // Download the selected release asset archive
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
+                // Use the token to avoid rate limits
                 execSync(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
+                // Fallback to unauthenticated requests (might get rate limited)
                 execSync(`curl -L -o ${archive} ${asset.browser_download_url}`)
             }
 
+            // Extract the archive into the install target
             console.log("Unpacking archive file...")
             execSync(`cd ${binpath} && ${extract} ${archive}`)
 
+            // Remove the downloaded asset archive
             console.log("Removing asset archive...")
             fs.unlinkSync(archive)
 
+            // Successfully installed gotestfmt, return early
             console.log("Successfully set up gotestfmt.")
             return
         }
     }
 
+    // Throw an error if no asset matched the expected postfix
     throw `No release asset matched postfix '${postfix}'.`
 }
 
