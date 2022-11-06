@@ -22,7 +22,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             if (token) {
                 execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
-                execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} {asset.browser_download_url}`)
+                execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} ${asset.browser_download_url}`)
             }
 
             console.log("Creating /usr/local/lib/gotestfmt directory...")
