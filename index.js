@@ -17,7 +17,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
 
-    if (os === windows) {
+    if (os === "windows") {
         execSync(`"${binpath}" >> $env:GITHUB_PATH`);
     }
 
