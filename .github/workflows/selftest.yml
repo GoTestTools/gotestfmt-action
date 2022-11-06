@@ -33,6 +33,7 @@ jobs:
         shell: bash
         run: |
           echo "$PATH" | tr ':' '\n'
+          ls -lar "/c/Program Files/GoTestTools/bin/" || true
           go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
