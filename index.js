@@ -13,7 +13,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const pathsep = os === "windows" ? "\\" : "/";
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
-    const libpath = os === "windows" ? process.env.USERPROFILE + "\\bin" : "/usr/local/bin";
+    const binpath = os === "windows" ? process.env.USERPROFILE + "\\bin" : "/usr/local/bin";
     const extract = os === "windows" ? "tar -xvf " : "tar -xvzf";
     const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
 
@@ -30,13 +30,12 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             }
 
             console.log("Unpacking archive file...")
-            execSync(`cd ${libpath} && ${extract} ${archive}`)
+            execSync(`cd ${binpath} && ${extract} ${archive}`)
 
             console.log("Removing asset archive...")
             fs.unlinkSync(`${archive}`)
 
             console.log("Successfully set up gotestfmt.")
-
             return
         }
     }
