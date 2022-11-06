@@ -17,9 +17,9 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
         if (asset.name.endsWith(postfix)) {
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                execSync("curl -L -o /tmp/gotestfmt.tar.gz -H \"Authorization: Bearer " + token + "\" " + asset.browser_download_url)
+                execSync("curl -L -o /tmp/gotestfmt" + postfix + " -H \"Authorization: Bearer " + token + "\" " + asset.browser_download_url)
             } else {
-                execSync("curl -L -o /tmp/gotestfmt.tar.gz " + asset.browser_download_url)
+                execSync("curl -L -o /tmp/gotestfmt" + postfix + " " + asset.browser_download_url)
             }
             console.log("Creating /usr/local/lib/gotestfmt directory...")
             execSync("sudo mkdir -p /usr/local/lib/gotestfmt")
