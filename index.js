@@ -31,16 +31,19 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
+                console.log(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
                 execSync(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
+                console.log(`curl -L -o ${archive} ${asset.browser_download_url}`)
                 execSync(`curl -L -o ${archive} ${asset.browser_download_url}`)
             }
 
             console.log("Unpacking archive file...")
+            console.log(`cd ${binpath} && ${extract} ${archive}`)
             execSync(`cd ${binpath} && ${extract} ${archive}`)
 
             console.log("Removing asset archive...")
-            fs.unlinkSync(`${archive}`)
+            fs.unlinkSync(archive)
 
             console.log("Successfully set up gotestfmt.")
             return
