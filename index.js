@@ -37,6 +37,10 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
                 execSync(`curl -L -o ${archive} ${asset.browser_download_url}`)
             }
 
+            // Ensure the that the install target exists
+            console.log("Preparing install target...")
+            fs.mkdirSync(binpath)
+
             // Extract the archive into the install target
             console.log("Unpacking archive file...")
             execSync(`cd "${binpath}" && ${extract} ${archive}`)
