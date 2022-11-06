@@ -13,10 +13,14 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const pathsep = os === "windows" ? "\\" : "/";
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
-    const binpath = os === "windows" ? "C:\\Program Files" : "/usr/local/bin";
+    const binpath = os === "windows" ? "C:\\Program Files\\GoTestTools" : "/usr/local/bin";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
-    
+
+    if (os === windows) {
+        execSync(`"${binpath}" >> $env:GITHUB_PATH`);
+    }
+
     console.debug("postfix: " + postfix);
     console.debug("pathsep: " + pathsep);
     console.debug("tempdir: " + tempdir);
