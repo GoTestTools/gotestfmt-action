@@ -12,6 +12,8 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
+    const gopath  = process.env.GOPATH + "/bin";
+    const extract = "tar -xvzf";
 
     for (let asset of releaseAssets.data) {
 
@@ -25,20 +27,11 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
                 execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} ${asset.browser_download_url}`)
             }
 
-            console.log("Creating /usr/local/lib/gotestfmt directory...")
-            execSync("sudo mkdir -p /usr/local/lib/gotestfmt")
+            console.log("Unpacking archive file...")
+            execSync(`cd ${gopath} && ${extract} ${tempdir}/gotestfmt${postfix}`)
 
-            console.log("Unpacking tar file...")
-            execSync(`cd /usr/local/lib/gotestfmt && sudo tar -xvzf ${tempdir}/gotestfmt${postfix}`)
-
-            console.log("Removing tarball...")
+            console.log("Removing asset archive...")
             fs.unlinkSync(`${tempdir}/gotestfmt${postfix}`)
-
-            console.log("Creating /usr/local/bin directory if it does not exist already...")
-            execSync("sudo mkdir -p /usr/local/bin")
-
-            console.log("Linking gotestfmt...")
-            execSync("sudo ln -s /usr/local/lib/gotestfmt/gotestfmt /usr/local/bin/gotestfmt")
 
             console.log("Successfully set up gotestfmt.")
 
