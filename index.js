@@ -18,11 +18,10 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
         if (asset.name.endsWith(postfix)) {
 
+            console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download with bearer token...")
                 execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
-                console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
                 execSync(`curl -L -o ${tempdir}/gotestfmt${postfix} ${asset.browser_download_url}`)
             }
 
