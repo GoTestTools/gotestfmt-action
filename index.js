@@ -10,8 +10,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
         release_id: release.id,
     })
 
-    extension = os === "windows" ? "zip" : "tar.gz";
-    postfix = `_${os}_amd64.${extension}`;
+    postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
 
     for (let asset of releaseAssets.data) {
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
@@ -77,14 +76,16 @@ async function downloadGofmt(octokit, version, versionPrefix, os, org, repo, tok
 }
 
 async function determineOS() {
-    const os = execSync("uname").toString().trim().toLowerCase()
+    const uname = execSync("uname")
 
+    os = uname.toString().trim().toLowerCase()
     if (os.indexOf("msys_nt") === 0)
     {
         os = "windows";
     }
 
     console.log(`Running on OS '${os}'`)
+
     return os
 }
 
