@@ -33,6 +33,8 @@ jobs:
         shell: bash
         run: |
           echo "$PATH" | tr ':' '\n'
+          echo "Searching $USERPROFILE for binary"
+          ls "$USERPROFILE/bin"
           go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
