@@ -18,7 +18,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const archive = `${tempdir}gotestfmt${postfix}`;
 
     if (os === "windows") {
-        fs.mkdirSync(binpath)
+        fs.mkdirSync(binpath, { recursive: true })
         execSync(`echo "${binpath}" >> ${process.env.GITHUB_PATH}`)
     }
 
