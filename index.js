@@ -15,6 +15,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
     const libpath = os === "windows" ? process.env.USERPROFILE + "\bin" : "/usr/local/bin";
     const extract = os === "windows" ? "tar -xvf " : "tar -xvzf";
+    const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
 
     for (let asset of releaseAssets.data) {
 
@@ -23,16 +24,16 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                execSync(`curl -L -o ${tempdir}${pathsep}gotestfmt${postfix} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
+                execSync(`curl -L -o ${archive} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
-                execSync(`curl -L -o ${tempdir}${pathsep}gotestfmt${postfix} ${asset.browser_download_url}`)
+                execSync(`curl -L -o ${archive} ${asset.browser_download_url}`)
             }
 
             console.log("Unpacking archive file...")
-            execSync(`cd ${libpath} && ${extract} ${tempdir}${pathsep}gotestfmt${postfix}`)
+            execSync(`cd ${libpath} && ${extract} ${archive}`)
 
             console.log("Removing asset archive...")
-            fs.unlinkSync(`${tempdir}${pathsep}gotestfmt${postfix}`)
+            fs.unlinkSync(`${archive}`)
 
             console.log("Successfully set up gotestfmt.")
 
