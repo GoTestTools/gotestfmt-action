@@ -14,7 +14,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const pathsep = os === "windows" ? "\\" : "/";
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
     const binpath = os === "windows" ? process.env.USERPROFILE + "\\bin" : "/usr/local/bin";
-    const extract = os === "windows" ? "tar -xvf " : "tar -xvzf";
+    const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}${pathsep}gotestfmt${postfix}`;
 
     for (let asset of releaseAssets.data) {
