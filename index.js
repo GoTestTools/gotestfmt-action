@@ -13,25 +13,34 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
 
     for (let asset of releaseAssets.data) {
+
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
         if (asset.name.endsWith(postfix)) {
+
             console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
-                execSync("curl -L -o /tmp/gotestfmt" + postfix + " -H \"Authorization: Bearer " + token + "\" " + asset.browser_download_url)
+                execSync(`curl -L -o /tmp/gotestfmt${postfix} -H "Authorization: Bearer ${token}" ${asset.browser_download_url}`)
             } else {
-                execSync("curl -L -o /tmp/gotestfmt" + postfix + " " + asset.browser_download_url)
+                execSync(`curl -L -o /tmp/gotestfmt${postfix} {asset.browser_download_url}`)
             }
+
             console.log("Creating /usr/local/lib/gotestfmt directory...")
             execSync("sudo mkdir -p /usr/local/lib/gotestfmt")
+
             console.log("Unpacking tar file...")
             execSync("cd /usr/local/lib/gotestfmt && sudo tar -xvzf /tmp/gotestfmt.tar.gz")
+
             console.log("Removing tarball...")
             fs.unlinkSync("/tmp/gotestfmt.tar.gz")
+
             console.log("Creating /usr/local/bin directory if it does not exist already...")
             execSync("sudo mkdir -p /usr/local/bin")
+
             console.log("Linking gotestfmt...")
             execSync("sudo ln -s /usr/local/lib/gotestfmt/gotestfmt /usr/local/bin/gotestfmt")
+
             console.log("Successfully set up gotestfmt.")
+
             return
         }
     }
