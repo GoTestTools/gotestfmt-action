@@ -19,7 +19,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
     // Make sure that the install directory is on the PATH
     if (os === "windows") {
-        execSync(`"${binpath}" >> $env:GITHUB_PATH`);
+        execSync(`echo "${binpath}" >> $env:GITHUB_PATH`);
     }
 
     // Search through the latest release assets for an install canidate
