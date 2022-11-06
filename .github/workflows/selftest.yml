@@ -32,7 +32,6 @@ jobs:
         working-directory: testdata
         shell: bash
         run: |
-          ls /c/Windows/System32
           go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
