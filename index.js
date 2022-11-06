@@ -12,8 +12,8 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP : "/tmp";
-    const gopath  = process.env.GOPATH + "/bin";
-    const extract = "tar -xvzf";
+    const libpath = os === "windows" ? process.env.USERPROFILE : "/usr/local";
+    const extract = os === "windows" ? "tar -xvf " : "tar -xvzf";
 
     for (let asset of releaseAssets.data) {
 
@@ -28,7 +28,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             }
 
             console.log("Unpacking archive file...")
-            execSync(`cd ${gopath} && ${extract} ${tempdir}/gotestfmt${postfix}`)
+            execSync(`cd ${libpath}/bin && ${extract} ${tempdir}/gotestfmt${postfix}`)
 
             console.log("Removing asset archive...")
             fs.unlinkSync(`${tempdir}/gotestfmt${postfix}`)
