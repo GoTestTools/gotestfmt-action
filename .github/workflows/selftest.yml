@@ -28,13 +28,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run gotestfmt on Windows
-        if: matrix.os == 'windows'
-        shell: pwsh
-        run: |
-          echo "%PATH%"
-          go test -json -v ./... 2>&1 | gotestfmt.exe
-
       - name: Run gotestfmt
         working-directory: testdata
         shell: bash
