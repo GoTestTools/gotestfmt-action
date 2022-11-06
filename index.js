@@ -29,10 +29,10 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             execSync("sudo mkdir -p /usr/local/lib/gotestfmt")
 
             console.log("Unpacking tar file...")
-            execSync("cd /usr/local/lib/gotestfmt && sudo tar -xvzf /tmp/gotestfmt.tar.gz")
+            execSync(`cd /usr/local/lib/gotestfmt && sudo tar -xvzf ${tempdir}/gotestfmt${postfix}`)
 
             console.log("Removing tarball...")
-            fs.unlinkSync("/tmp/gotestfmt.tar.gz")
+            fs.unlinkSync(`${tempdir}/gotestfmt${postfix}`)
 
             console.log("Creating /usr/local/bin directory if it does not exist already...")
             execSync("sudo mkdir -p /usr/local/bin")
