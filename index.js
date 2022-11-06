@@ -81,7 +81,7 @@ async function downloadGofmt(octokit, version, versionPrefix, os, org, repo, tok
 async function determineOS() {
     const uname = execSync("uname")
 
-    os = uname.toString().trim().toLowerCase()
+    let os = uname.toString().trim().toLowerCase()
     if (os.indexOf("msys_nt") === 0)
     {
         os = "windows";
@@ -93,7 +93,13 @@ async function determineOS() {
 }
 
 async function determineGOOS() {
-    return process.env.GOOS;
+    const goos = process.env.GOOS;
+
+    if (goos) {
+        console.log(`Running on GOOS '${goos}'`)
+    }
+
+    return goos;
 }
 
 async function main() {
