@@ -9,11 +9,17 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
         repo: repo,
         release_id: release.id,
     })
-    tarPostfix = `_${os}_amd64.tar.gz`
+
+    postfix = `_${os}_amd64.tar.gz`
+
+    if (os === "windows") {
+        postfix = `_${os}_amd64.zip`
+    }
+
     for (let asset of releaseAssets.data) {
         console.log("Examining release asset " + asset.name + " at " + asset.browser_download_url + " ...")
-        if (asset.name.endsWith(tarPostfix)) {
-            console.log("Found Unix binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
+        if (asset.name.endsWith(postfix)) {
+            console.log("Found binary named " + asset.name + " at " + asset.browser_download_url + " , attempting download...")
             if (token) {
                 execSync("curl -L -o /tmp/gotestfmt.tar.gz -H \"Authorization: Bearer " + token + "\" " + asset.browser_download_url)
             } else {
@@ -33,7 +39,8 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             return
         }
     }
-    throw `No release asset matched postfix '${tarPostfix}'.`
+
+    throw `No release asset matched postfix '${postfix}'.`
 }
 
 async function downloadGofmt(octokit, version, versionPrefix, os, org, repo, token) {
