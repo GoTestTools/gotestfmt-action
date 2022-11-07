@@ -13,15 +13,9 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     // Determine environment specific details, paths etc...
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP + "\\" : "/tmp/";
-    const binpath = os === "windows" ? "C:\\Program Files\\GoTestTools\\bin\\" : "/usr/local/bin/";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const binfile = os === "windows" ? "gotestfmt.exe" : "gotestfmt";
     const archive = `${tempdir}gotestfmt${postfix}`;
-
-    if (os === "windows") {
-        fs.mkdirSync(binpath, { recursive: true })
-        execSync(`echo "${binpath}" >> ${process.env.GITHUB_PATH}`)
-    }
 
     // Search through the latest release assets for an install canidate
     for (let asset of releaseAssets.data) {
@@ -40,13 +34,10 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             // Extract the archive into the install target
             console.log("Unpacking archive file...")
+            core.addPath(process.env.GITHUB_WORKSPACE)
+            process.chdir(process.env.GITHUB_WORKSPACE)
             execSync(`${extract} "${archive}"`)
-            fs.copyFile(binfile, `${binpath}${binfile}`, fs.constants.COPYFILE_EXCL, function (err) {
-                if (err) {
-                    throw err;
-                }
-            });
-            fs.readdirSync(binpath).forEach(file => {
+            fs.readdirSync(process.env.GITHUB_WORKSPACE).forEach(file => {
                 console.log("Installed: " + file);
             });
 
