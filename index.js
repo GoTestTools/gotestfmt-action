@@ -39,7 +39,8 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
 
             // Extract the archive into the install target
             console.log("Unpacking archive file...")
-            execSync(`${extract} -C "${binpath}" "${archive}"`)
+            execSync(`${extract} "${archive}"`)
+            fs.rename("gotestfmt", `${binpath}/gotestfmt`)
 
             // Remove the downloaded asset archive
             console.log("Removing asset archive...")
