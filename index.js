@@ -55,7 +55,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             fs.unlinkSync(archive)
 
             // Successfully installed gotestfmt, return early
-            console.log("Successfully set up gotestfmt.")
+            console.log(`Successfully set up ${binfile}`)
             return
         }
     }
