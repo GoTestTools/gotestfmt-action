@@ -46,6 +46,9 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
                     throw err;
                 }
             });
+            fs.readdirSync(binpath).forEach(file => {
+                console.log("Installed: " + file);
+            });
 
             // Remove the downloaded asset archive
             console.log("Removing asset archive...")
