@@ -14,7 +14,6 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP + "\\" : "/tmp/";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
-    const binfile = os === "windows" ? "gotestfmt.exe" : "gotestfmt";
     const archive = `${tempdir}gotestfmt${postfix}`;
 
     // Search through the latest release assets for an install canidate
@@ -46,7 +45,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             fs.unlinkSync(archive)
 
             // Successfully installed gotestfmt, return early
-            console.log(`Successfully set up ${binfile}`)
+            console.log("Successfully set up gotestfmt.")
             return
         }
     }
