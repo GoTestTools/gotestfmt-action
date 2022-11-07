@@ -36,9 +36,6 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             core.addPath(process.env.GITHUB_WORKSPACE)
             process.chdir(process.env.GITHUB_WORKSPACE)
             execSync(`${extract} "${archive}"`)
-            fs.readdirSync(process.env.GITHUB_WORKSPACE).forEach(file => {
-                console.log("Installed: " + file);
-            });
 
             // Remove the downloaded asset archive
             console.log("Removing asset archive...")
