@@ -1,6 +1,5 @@
 on:
   pull_request:
-  push:
 
 name: Self-test
 jobs:
@@ -27,10 +26,6 @@ jobs:
         uses: ./
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Debug
-        shell: bash
-        run: ls -lar
 
       - name: Run gotestfmt
         working-directory: testdata
