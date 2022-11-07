@@ -41,7 +41,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
             // Extract the archive into the install target
             console.log("Unpacking archive file...")
             execSync(`${extract} "${archive}"`)
-            fs.rename(binfile, `${binpath}/{binfile}`, function (err) {
+            fs.rename(binfile, `${binpath}/${binfile}`, function (err) {
                 if (err) {
                     throw err;
                 }
