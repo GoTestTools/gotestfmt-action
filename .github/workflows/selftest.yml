@@ -28,6 +28,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug
+        shell: bash
+        run: ls -lar
+
       - name: Run gotestfmt
         working-directory: testdata
         shell: bash
