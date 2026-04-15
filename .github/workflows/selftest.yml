@@ -9,18 +9,19 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu', 'macos', 'windows']
+        go-version: ['1.16', '1.24']
 
-    name: on ${{ matrix.os }}
+    name: on ${{ matrix.os }} (go ${{ matrix.go-version }})
     runs-on: ${{ matrix.os }}-latest
     steps:
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
-
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
 
       - name: Install gotestfmt
         uses: ./
@@ -34,9 +35,9 @@ jobs:
           go test -json -v ./... 2>&1 | tee gotest.${{ matrix.os }}.log | gotestfmt
 
       - name: Upload test log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-log-${{ matrix.os }}
+          name: test-log-${{ matrix.os }}-go${{ matrix.go-version }}
           path: testdata/gotest.${{ matrix.os }}.log
           if-no-files-found: error
