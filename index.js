@@ -2,9 +2,10 @@ const core = require('@actions/core');
 const { Octokit } = require("@octokit/rest");
 const fs = require("fs")
 const { execSync } = require("child_process")
+const { arch: processArch } = require("node:process");
 
-async function downloadRelease(octokit, os, org, repo, release, token) {
-    const postfix = `_${os}_amd64.${os === "windows" ? "zip" : "tar.gz"}`;
+async function downloadRelease(octokit, os, arch, org, repo, release, token) {
+    const postfix = `_${os}_${arch}.${os === "windows" ? "zip" : "tar.gz"}`;
     const tempdir = os === "windows" ? process.env.TEMP + "\\" : "/tmp/";
     const extract = os === "windows" ? "tar -xvf" : "tar -xvzf";
     const archive = `${tempdir}gotestfmt${postfix}`;
@@ -40,7 +41,7 @@ async function downloadRelease(octokit, os, org, repo, release, token) {
     throw `No release asset matched postfix '${postfix}'.`
 }
 
-async function downloadGofmt(octokit, version, versionPrefix, os, org, repo, token) {
+async function downloadGofmt(octokit, version, versionPrefix, os, arch, org, repo, token) {
     if (version !== "") {
         if (!version.startsWith(versionPrefix)) {
             throw "Specified version " + version + " does not start with required version prefix " + versionPrefix + "."
@@ -60,7 +61,7 @@ async function downloadGofmt(octokit, version, versionPrefix, os, org, repo, tok
         if ((version !== "" && release.name === version) || (!release.prerelease && release.name.startsWith(versionPrefix))) {
             console.log("Found release " + release.name + " matching criteria, attempting to download binary...")
             try {
-                await downloadRelease(octokit, os, org, repo, release, token)
+                await downloadRelease(octokit, os, arch, org, repo, release, token)
                 return
             } catch (e) {
                 tries++
@@ -90,6 +91,15 @@ async function determineOS() {
     return os
 }
 
+function determineArch() {
+    switch (processArch) {
+        case "x64":
+            return "amd64";
+        default:
+            return processArch;
+    }
+}
+
 async function main() {
     try {
         // versionPrefix is the prefix of the version gotestfmt-action supports.
@@ -102,7 +112,8 @@ async function main() {
             auth: token,
         })
         const os = await determineOS()
-        await downloadGofmt(octokit, version, versionPrefix, os, org, repo, token)
+        const arch = determineArch()
+        await downloadGofmt(octokit, version, versionPrefix, os, arch, org, repo, token)
         console.log("Setup complete.")
     } catch (error) {
         console.log("Setup failed.")
